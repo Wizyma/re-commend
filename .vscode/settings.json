@@ -5,6 +5,7 @@
   "eslint.experimental.useFlatConfig": true,
   "cSpell.words": [
     "fastify",
+    "pino",
     "SUPABASE"
   ]
 }
