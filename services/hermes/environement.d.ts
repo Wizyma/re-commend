@@ -1,8 +1,24 @@
+import type { PrismaClient } from '@prisma/client';
+import type { User } from '@supabase/supabase-js';
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
       DATABASE_URL: string;
+      DIRECT_URL: string;
+      SUPABASE_URL: string;
+      SUPABASE_API_KEY: string;
     }
+  }
+}
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    prisma: PrismaClient
+  }
+
+  interface FastifyRequest {
+    user: User
   }
 }
 

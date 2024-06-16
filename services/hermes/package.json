@@ -12,7 +12,8 @@
     "prisma:reset": "prisma migrate reset",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:pull": "prisma db pull",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "generate:db:types": "supabase gen types typescript --project-id ivqarfreqpslmxmpmdyp > src/database.d.ts"
   },
   "keywords": [],
   "author": "",
@@ -26,9 +27,12 @@
   "dependencies": {
     "@fastify/postgres": "5.2.2",
     "@prisma/client": "5.15.0",
+    "@supabase/supabase-js": "2.43.5",
     "fastify": "4.28.0",
     "fastify-plugin": "4.5.1",
     "pg": "8.12.0",
+    "pino": "9.2.0",
+    "pino-pretty": "11.2.1",
     "prisma": "5.15.0"
   }
 }
