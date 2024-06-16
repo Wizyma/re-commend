@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '../database.js';
+import { Database } from '../../database.js';
 
 const options = {
   auth: {

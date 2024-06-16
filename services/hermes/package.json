@@ -13,7 +13,7 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:pull": "prisma db pull",
     "prisma:generate": "prisma generate",
-    "generate:db:types": "supabase gen types typescript --project-id ivqarfreqpslmxmpmdyp > src/database.d.ts"
+    "generate:db:types": "supabase gen types typescript --project-id ivqarfreqpslmxmpmdyp > database.d.ts"
   },
   "keywords": [],
   "author": "",
