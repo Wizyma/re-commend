@@ -22,7 +22,7 @@
     "@types/node": "20.14.2",
     "@types/pg": "8.11.6",
     "tsx": "4.15.5",
-    "typescript": "5.4.5"
+    "typescript": "5.5.2"
   },
   "dependencies": {
     "@fastify/postgres": "5.2.2",

@@ -4,7 +4,6 @@
     "moduleResolution": "NodeNext",
     "noEmit": false,
     "composite": false,
-    "outDir": "./dist",
     "baseUrl": "./"
   },
   "include": ["src/**/*.ts", "**/*.d.ts"]

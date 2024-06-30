@@ -13,3 +13,5 @@ const options = {
 };
 
 export const supabase = createClient<Database>(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY, options);
+
+export type Supabase = typeof supabase;
