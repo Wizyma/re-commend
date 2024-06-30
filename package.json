@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "dev:hermes": "pnpm --filter=hermes dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "engines": {
     "node": "20.14.0",
-    "pnpm": "9.3.0"
+    "pnpm": "9.4.0"
   },
   "devDependencies": {
     "@eslint/js": "9.5.0",
