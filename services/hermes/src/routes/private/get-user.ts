@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+import { USER_NOT_AUTHORIZED_REASON, USER_NOT_FOUND_REASON } from "src/constants/errors.js";
 import { z } from "zod";
 
 export function getUser(server: FastifyInstance) {
@@ -25,9 +26,22 @@ export function getUser(server: FastifyInstance) {
             }),
           }),
         }),
+        401: z.object({
+          error: z.object({
+            message: z.string().optional(),
+            reason: z.literal(USER_NOT_AUTHORIZED_REASON)
+          }),
+        }),
         404: z.object({
-          entity: z.object({
-            error: z.string(),
+          error: z.object({
+            message: z.string().optional(),
+            reason: z.literal(USER_NOT_FOUND_REASON)
+          }),
+        }),
+        403: z.object({
+          error: z.object({
+            message: z.string().optional(),
+            reason: z.literal(USER_NOT_AUTHORIZED_REASON)
           }),
         }),
       }
@@ -40,7 +54,22 @@ export function getUser(server: FastifyInstance) {
       });
 
       if (!user) {
-        return reply.status(404).send({ entity: { error: 'User not found' } });
+        return reply.status(404).send({
+          error: {
+            reason: 'USER_NOT_FOUND',
+          },
+        });
+      }
+
+      if (user.id !== request.user.id) {
+        server.log.error(`User ${request.user.id} is not authorized to view user ${user.id}`);
+
+        return reply.status(403).send({
+          error: {
+            reason: USER_NOT_AUTHORIZED_REASON,
+            message: 'User is not authorized to view this user',
+          },
+        });
       }
 
       return reply.status(200).send({ entity: { user } });

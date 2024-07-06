@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { UNKNOWN_ERROR_REASON, USER_ALREADY_EXISTS_REASON } from "src/constants/errors.js";
 import { z } from "zod";
 
 export function createUser(server: FastifyInstance) {
@@ -24,33 +25,31 @@ export function createUser(server: FastifyInstance) {
             }),
           }),
         }),
-        403: z.object({
-          entity: z.object({
-            error: z.string(),
+        409: z.object({
+          error: z.object({
+            message: z.string().optional(),
+            reason: z.literal(USER_ALREADY_EXISTS_REASON),
           }),
         }),
         400: z.object({
-          entity: z.object({
-            error: z.string(),
-          }),
+          error: z.object({
+            message: z.string().optional(),
+            reason: z.literal(UNKNOWN_ERROR_REASON),
+          })
         }),
       }
     },
     async handler(request, reply) {
       const { email, password, firstName, lastName } = request.body;
 
-      const { data, error } = await server.supabase.auth.signUp({
+      const { error } = await server.supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) {
         server.log.error(error);
-        return reply.status(400).send({ entity: { error: JSON.stringify(error) } });
-      }
-
-      if (!data.user) {
-        return reply.status(400).send({ entity: { error: 'User was not created' } });
+        return reply.status(400).send({ error: { reason: UNKNOWN_ERROR_REASON, message: error.message } });
       }
 
       const user = await server.prisma.user.create({
@@ -59,7 +58,11 @@ export function createUser(server: FastifyInstance) {
           firstName,
           lastName,
         }
+      }).catch((error) => {
+        server.log.error(error);
+        return reply.status(409).send({ error: { reason: USER_ALREADY_EXISTS_REASON } });
       });
+
 
       return reply.status(201).send({ entity: { user } });
     }
