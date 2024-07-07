@@ -9,5 +9,5 @@
       "vitest/importMeta"
     ]
   },
-  "include": ["src/**/*.ts", "**/*.d.ts", "./vitest.config.ts"]
+  "include": ["src/**/*.ts", "**/*.d.ts"]
 }

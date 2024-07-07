@@ -5,7 +5,7 @@ import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod
 import { privateRoutes } from './routes/private/index.js';
 import { publicRoutes } from './routes/public/index.js';
 
-const server = fastify({
+export const server = fastify({
   logger: {
     transport: {
       target: 'pino-pretty',

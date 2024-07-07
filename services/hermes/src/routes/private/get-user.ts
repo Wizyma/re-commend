@@ -7,12 +7,17 @@ export function getUser(server: FastifyInstance) {
     method: 'GET',
     url: '/v1/auth/user/:id',
     schema: {
-      querystring: z.object({
+      params: z.object({
         id: z.string().cuid(),
       }),
-      headers: z.object({
-        Authorization: z.string().min(1).regex(/^Bearer .+$/),
-      }),
+      headers: z.union([
+        z.object({
+          authorization: z.string().min(1).regex(/^Bearer .+$/),
+        }),
+        z.object({
+          Authorization: z.string().min(1).regex(/^Bearer .+$/),
+        }),
+      ]),
       response: {
         200: z.object({
           entity: z.object({
@@ -21,8 +26,8 @@ export function getUser(server: FastifyInstance) {
               email: z.string().email(),
               firstName: z.string(),
               lastName: z.string(),
-              updatedAt: z.string(),
-              createdAt: z.string(),
+              updatedAt: z.coerce.date(),
+              createdAt: z.coerce.date(),
             }),
           }),
         }),
@@ -49,7 +54,9 @@ export function getUser(server: FastifyInstance) {
     async handler(request, reply) {
       const user = await server.prisma.user.findFirstOrThrow({
         where: {
-          id: request.user.id,
+          // @ts-expect-error id is not in the where clause
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          id: request.params.id
         },
       });
 
@@ -61,7 +68,7 @@ export function getUser(server: FastifyInstance) {
         });
       }
 
-      if (user.id !== request.user.id) {
+      if (user.email !== request.user.email) {
         server.log.error(`User ${request.user.id} is not authorized to view user ${user.id}`);
 
         return reply.status(403).send({
