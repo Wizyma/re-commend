@@ -7,8 +7,7 @@ export default defineConfig({
       src: '/src',
     },
     clearMocks: true,
-    globals: true,
-    setupFiles: ['dotenv/config'],
+    setupFiles: ['./setup-test.ts'],
     env: {
       DATABASE_TEST: "true",
       DATABASE_URL: "postgres://postgres:admin@127.0.0.1:5432/postgres",

@@ -10,6 +10,7 @@ declare global {
       SUPABASE_URL: string;
       SUPABASE_API_KEY: string;
       DATABASE_TEST: boolean;
+      PORT?: number;
     }
   }
 }

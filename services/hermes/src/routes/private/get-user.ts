@@ -1,9 +1,10 @@
 import { FastifyInstance } from "fastify";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { USER_NOT_AUTHORIZED_REASON, USER_NOT_FOUND_REASON } from "src/constants/errors.js";
 import { z } from "zod";
 
 export function getUser(server: FastifyInstance) {
-  return server.withTypeProvider().route({
+  return server.withTypeProvider<ZodTypeProvider>().route({
     method: 'GET',
     url: '/v1/auth/user/:id',
     schema: {
@@ -54,8 +55,6 @@ export function getUser(server: FastifyInstance) {
     async handler(request, reply) {
       const user = await server.prisma.user.findFirstOrThrow({
         where: {
-          // @ts-expect-error id is not in the where clause
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           id: request.params.id
         },
       });
